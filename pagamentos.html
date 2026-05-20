@@ -82,7 +82,7 @@
   </div>
 
   <div class="body">
-    <div class="badge">💳 Registro de Pagamento</div>
+    <div class="badge">💳 Registro de Pagamento<span id="badge-vendedora"></span></div>
 
     <div class="field-group">
       <label>Nº do Pedido</label>
@@ -214,6 +214,15 @@
 
   const WEBHOOK_PAGAMENTOS = 'https://hook.us2.make.com/x6uej4n9v7pckwjake9amnnalf136nvr';
 
+  // Pega vendedora da URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const VENDEDORA = urlParams.get('v') ? urlParams.get('v').toUpperCase() : '';
+
+  // Exibe vendedora no badge
+  if (VENDEDORA) {
+    document.getElementById('badge-vendedora').textContent = ' — ' + VENDEDORA;
+  }
+
   // Show enviar button after gerar
   const _origGerar = gerar;
   gerar = function() {
@@ -251,6 +260,7 @@
     const formData = new URLSearchParams();
     const status = parseFloat(pct) >= 100 ? 'PAGO' : 'PARCIAL';
     formData.append('Pedido', pedido);
+    formData.append('Vendedora', VENDEDORA);
     formData.append('ValorTotal', total.toFixed(2).replace('.', ','));
     formData.append('ValorPago', pago.toFixed(2).replace('.', ','));
     formData.append('PctParcela', pct);
