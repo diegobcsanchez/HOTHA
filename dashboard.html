@@ -152,7 +152,7 @@ async function loadData() {
   try {
     const [pedidosRaw, pagamentosRaw] = await Promise.all([
       fetchSheet('PEDIDOS!A:H'),
-      fetchSheet('PAGAMENTOS!A:H')
+      fetchSheet('PAGAMENTOS!A:I')
     ]);
 
     // Parse pedidos (skip header)
@@ -166,7 +166,7 @@ async function loadData() {
     const pagamentos = pagamentosRaw.slice(1).filter(r => r[0]).map(r => ({
       pedido: r[0] || '', vendedora: r[1] || '',
       valor: parseValor(r[3]), pctPago: r[4] || '',
-      valorPago: parseValor(r[5]), data: r[6] || '', status: r[7] || ''
+      valorPago: parseValor(r[6]), data: r[7] || '', status: r[8] || ''
     }));
 
     renderDashboard(pedidos, pagamentos);
