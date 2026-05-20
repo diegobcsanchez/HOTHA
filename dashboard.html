@@ -166,7 +166,7 @@ async function loadData() {
     const pagamentos = pagamentosRaw.slice(1).filter(r => r[0]).map(r => ({
       pedido: r[0] || '', vendedora: r[1] || '',
       valor: parseValor(r[3]), pctPago: r[4] || '',
-      valorPago: parseValor(r[6]), data: r[7] || '', status: r[8] || ''
+      pctAcumulado: r[5] || '', valorPago: parseValor(r[6]), data: r[7] || '', status: r[8] || ''
     }));
 
     renderDashboard(pedidos, pagamentos);
@@ -274,14 +274,15 @@ function renderDashboard(pedidos, pagamentos) {
       ${pagamentos.length === 0 ? '<div class="empty">Nenhum pagamento registrado ainda</div>' : `
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Pedido</th><th>Valor Total</th><th>Valor Pago</th><th>% Pago</th><th>Data</th><th>Status</th></tr></thead>
+          <thead><tr><th>Pedido</th><th>Valor Total</th><th>Valor Pago</th><th>% Pago</th><th>% Acumulado</th><th>Data</th><th>Status</th></tr></thead>
           <tbody>
             ${pagamentos.slice().reverse().slice(0, 20).map(p => `
               <tr>
                 <td><strong>${p.pedido}</strong></td>
                 <td>${formatReal(p.valor)}</td>
                 <td>${formatReal(p.valorPago)}</td>
-                <td>${p.pctPago ? p.pctPago + '%' : '—'}</td>
+                <td>${p.pctPago ? p.pctPago + "%" : "—"}</td>
+                <td>${p.pctAcumulado ? parseFloat(p.pctAcumulado).toFixed(1) + "%" : "—"}</td>
                 <td>${p.data}</td>
                 <td>${badgeStatus(p.status)}</td>
               </tr>
